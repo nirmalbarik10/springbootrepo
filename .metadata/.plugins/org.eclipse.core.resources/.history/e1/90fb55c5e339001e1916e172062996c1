@@ -1,0 +1,51 @@
+package com.restjpa.service;
+
+import lombok.AllArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.restjpa.entity.Customer;
+import com.restjpa.repo.CustomerRepository;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+@Service
+@AllArgsConstructor
+public class CustomerServiceImpl implements CustomerService {
+
+    private CustomerRepository customerRepository;
+
+    @Override
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer getCustomerById(Long CustomerId) {
+        Optional<Customer> optionalCustomer = CustomerRepository.findById(id);
+        return optionalCustomer.get();
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    @Override
+    public Customer updateCustomer(Customer Customer) {
+        Customer existingCustomer = customerRepository.findById(Customer.getId()).get();
+        existingCustomer.setFirstName(Customer.getFirstName());
+        existingCustomer.setLastName(Customer.getLastName());
+        existingCustomer.setEmail(Customer.getEmail());
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+        return updatedCustomer;
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+    	customerRepository.deleteById(id);
+    }
+}

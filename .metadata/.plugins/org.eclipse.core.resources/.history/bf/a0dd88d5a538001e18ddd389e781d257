@@ -1,0 +1,11 @@
+package com.example.ioc.bean;
+
+public class PostgreDataSource implements DataSource {
+
+	@Override
+	public String[] getNames() {
+		String[] mailids= {"shreyash@gmail.com"};
+		return mailids;
+	}
+
+}

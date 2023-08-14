@@ -1,0 +1,59 @@
+package com.restjpa.controller;
+
+import lombok.AllArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.restjpa.service.CustomerService;
+
+import java.util.List;
+
+@RestController
+@AllArgsConstructor
+@RequestMapping("api/customers")
+public class CustomerController {
+
+    private CustomerService customerservice;
+
+    // build create Customer REST API
+    @PostMapping
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer Customer){
+        Customer savedCustomer = customerservice.createCustomer(Customer);
+        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+    }
+
+    // build get Customer by id REST API
+    // http://localhost:8080/api/customers/1
+    @GetMapping("{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable("id") Long CustomerId){
+        Customer Customer = customerservice.getCustomerById(CustomerId);
+        return new ResponseEntity<>(Customer, HttpStatus.OK);
+    }
+
+    // Build Get All customers REST API
+    // http://localhost:8080/api/customers
+    @GetMapping
+    public ResponseEntity<List<Customer>> getAllcustomers(){
+        List<Customer> customers = customerservice.getAllcustomers();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
+    }
+
+    // Build Update Customer REST API
+    @PutMapping("{id}")
+    // http://localhost:8080/api/customers/1
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long CustomerId,
+                                           @RequestBody Customer Customer){
+        Customer.setId(CustomerId);
+        Customer updatedCustomer = customerservice.updateCustomer(Customer);
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    }
+
+    // Build Delete Customer REST API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable("id") Long CustomerId){
+        customerservice.deleteCustomer(CustomerId);
+        return new ResponseEntity<>("Customer successfully deleted!", HttpStatus.OK);
+    }
+}
